@@ -1,0 +1,596 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanPredict | Loan Eligibility Predictor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cream: #f8f3ec;
+            --white: #ffffff;
+            --brown: #42281d;
+            --brown-light: #8b5a36;
+            --brown-soft: #efe3d5;
+            --text: #382a23;
+            --muted: #817268;
+            --border: #e7d9ca;
+            --green: #246b45;
+            --green-bg: #e7f5eb;
+            --red: #a52d2d;
+            --red-bg: #fceaea;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: var(--brown);
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -0.7px;
+        }
+
+        .brand span {
+            color: #e7c6a3;
+        }
+
+        .nav-label {
+            font-size: 12px;
+            color: #eadbd0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 42px auto;
+            padding: 0 22px;
+        }
+
+        .hero {
+            margin-bottom: 30px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: var(--brown-soft);
+            color: var(--brown);
+            border-radius: 30px;
+            padding: 7px 13px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 44px);
+            line-height: 1.2;
+            color: var(--brown);
+            letter-spacing: -1.5px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 14px;
+            max-width: 650px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(250px, 0.8fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px;
+        }
+
+        .section-title {
+            color: var(--brown);
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .section-description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 19px;
+        }
+
+        .field {
+            min-width: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        input, select {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #fffdfa;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--brown-light);
+        }
+
+        .hint {
+            display: block;
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 25px;
+            border: none;
+            border-radius: 10px;
+            background: var(--brown);
+            color: white;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: var(--brown-light);
+        }
+
+        .side-card {
+            background: var(--brown);
+            color: white;
+            border-radius: 18px;
+            padding: 26px;
+        }
+
+        .side-card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .side-card > p {
+            color: #e6d6c9;
+            font-size: 12px;
+            margin-bottom: 22px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            background: #684632;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f4d9bc;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .step h3 {
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .step p {
+            font-size: 11px;
+            color: #e6d6c9;
+        }
+
+        .notice {
+            border-top: 1px solid #684632;
+            padding-top: 17px;
+            font-size: 11px;
+            color: #e6d6c9;
+        }
+
+        .result-card {
+            margin-top: 24px;
+            padding: 24px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: white;
+        }
+
+        .result-card.approved {
+            background: var(--green-bg);
+            border-color: #b8dec4;
+        }
+
+        .result-card.rejected {
+            background: var(--red-bg);
+            border-color: #efc0c0;
+        }
+
+        .result-heading {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        .approved .result-heading {
+            color: var(--green);
+        }
+
+        .rejected .result-heading {
+            color: var(--red);
+        }
+
+        .confidence {
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .reasons {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .reasons h3 {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .reasons ul {
+            padding-left: 20px;
+            font-size: 12px;
+        }
+
+        .error-box {
+            margin-top: 20px;
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid #efc0c0;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .disclaimer {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 28px 18px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        @media (max-width: 800px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .side-card {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+
+            .container {
+                margin-top: 28px;
+                padding: 0 14px;
+            }
+
+            .card, .side-card {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-label {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="brand">Loan<span>Predict</span></div>
+        <div class="nav-label">Machine Learning Project</div>
+    </nav>
+
+    <main class="container">
+
+        <section class="hero">
+            <span class="eyebrow">Smart Loan Eligibility Analysis</span>
+            <h1>Your Loan, Our Prediction.</h1>
+            <p>
+                Enter the applicant's personal and financial details to
+                predict loan eligibility using a machine learning model
+                trained on historical sample data.
+            </p>
+        </section>
+
+        <div class="layout">
+
+            <section class="card">
+                <h2 class="section-title">Applicant Details</h2>
+                <p class="section-description">
+                    Complete all fields before submitting your application details.
+                </p>
+
+                <form action="/predict" method="POST">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="married">Marital Status</label>
+                            <select id="married" name="married" required>
+                                <option value="Yes">Married</option>
+                                <option value="No">Unmarried</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="education">Education</label>
+                            <select id="education" name="education" required>
+                                <option value="Graduate">Graduate</option>
+                                <option value="Not Graduate">Not Graduate</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="self_employed">Self Employed</label>
+                            <select id="self_employed" name="self_employed" required>
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="applicant_income">Applicant Income</label>
+                            <input
+                                type="number"
+                                id="applicant_income"
+                                name="applicant_income"
+                                min="1"
+                                step="any"
+                                placeholder="e.g. 5000"
+                                required>
+                            <span class="hint">Enter monthly income.</span>
+                        </div>
+
+                        <div class="field">
+                            <label for="coapplicant_income">Co-applicant Income</label>
+                            <input
+                                type="number"
+                                id="coapplicant_income"
+                                name="coapplicant_income"
+                                min="0"
+                                step="any"
+                                value="0"
+                                required>
+                            <span class="hint">Enter 0 if there is no co-applicant.</span>
+                        </div>
+
+                        <div class="field">
+                            <label for="loan_amount">Loan Amount</label>
+                            <input
+                                type="number"
+                                id="loan_amount"
+                                name="loan_amount"
+                                min="1"
+                                step="any"
+                                placeholder="e.g. 120"
+                                required>
+                            <span class="hint">Use the same units as the training dataset.</span>
+                        </div>
+
+                        <div class="field">
+                            <label for="loan_term">Loan Term (months)</label>
+                            <select id="loan_term" name="loan_term" required>
+                                <option value="360">360 months</option>
+                                <option value="240">240 months</option>
+                                <option value="180">180 months</option>
+                                <option value="120">120 months</option>
+                                <option value="60">60 months</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="credit_history">Credit History</label>
+                            <select id="credit_history" name="credit_history" required>
+                                <option value="1">Good / Available (1)</option>
+                                <option value="0">Poor / Unavailable (0)</option>
+                            </select>
+                            <span class="hint">Use the same encoding as the dataset.</span>
+                        </div>
+
+                        <div class="field">
+                            <label for="property_area">Property Area</label>
+                            <select id="property_area" name="property_area" required>
+                                <option value="Urban">Urban</option>
+                                <option value="Semiurban">Semiurban</option>
+                                <option value="Rural">Rural</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <button class="submit-btn" type="submit">
+                        Predict Loan Eligibility →
+                    </button>
+
+                </form>
+
+                {% if prediction_text %}
+                    <div class="result-card {{ result_class }}" aria-live="polite">
+                        <div class="result-heading">{{ prediction_text }}</div>
+
+                        <p>
+                            {% if result_class == "approved" %}
+                                The model predicts an approval outcome for these details.
+                            {% else %}
+                                The model predicts a rejection outcome for these details.
+                            {% endif %}
+                        </p>
+
+                        {% if confidence_score %}
+                            <div class="confidence">
+                                Model probability for this predicted outcome:
+                                <strong>{{ confidence_score }}</strong>
+                            </div>
+                        {% endif %}
+
+                        {% if reasons %}
+                            <div class="reasons">
+                                <h3>Prediction Explanation</h3>
+                                <ul>
+                                    {% for reason in reasons %}
+                                        <li>{{ reason }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if error %}
+                    <div class="error-box" role="alert">
+                        <strong>Something went wrong</strong>
+                        <p>{{ error }}</p>
+                    </div>
+                {% endif %}
+
+                <p class="disclaimer">
+                    Disclaimer: This project is for educational purposes only.
+                    Predictions depend on the sample training dataset and are
+                    not official financial advice or actual bank decisions.
+                    Gender and other personal characteristics should not be
+                    used as real-world lending criteria.
+                </p>
+            </section>
+
+            <aside class="side-card">
+                <h2>How It Works</h2>
+                <p>
+                    A simple machine learning workflow that converts
+                    applicant details into a predicted outcome.
+                </p>
+
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div>
+                        <h3>Enter Details</h3>
+                        <p>Provide the applicant's personal and financial information.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div>
+                        <h3>Model Analysis</h3>
+                        <p>The trained model identifies patterns learned from sample data.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div>
+                        <h3>View Prediction</h3>
+                        <p>See the predicted status and the model probability.</p>
+                    </div>
+                </div>
+
+                <div class="notice">
+                    <strong>Project Technologies</strong>
+                    <p>Python · Flask · Pandas · Scikit-learn · HTML · CSS</p>
+                </div>
+            </aside>
+
+        </div>
+
+    </main>
+
+    <footer>
+        LoanPredict — Machine Learning Demonstration Project
+    </footer>
+
+</body>
+</html>
